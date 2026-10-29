@@ -11,7 +11,7 @@ inline constexpr unsigned kDfExtendedSquitter = 17;
 
 using FrameBytes = std::array<std::uint8_t, kLongFrameBytes>;
 
-enum class Integrity { Valid, Corrected, Invalid };
+enum class Integrity : std::uint8_t { Valid, Corrected, Invalid };
 
 /// CRC-24 (generator 0xFFF409) over `length` bytes, MSB first, zero initial value.
 [[nodiscard]] std::uint32_t crc24(const std::uint8_t* data, std::size_t length) noexcept;

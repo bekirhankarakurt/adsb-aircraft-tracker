@@ -50,7 +50,7 @@ public:
     [[nodiscard]] std::vector<Aircraft> snapshot() const;
 
 private:
-    void applyPosition(Aircraft& aircraft, const AirbornePosition& p, double time) const;
+    void applyPosition(Aircraft& ac, const AirbornePosition& p, double time) const;
 
     std::optional<GeoPoint> receiver_;
     std::map<std::uint32_t, Aircraft> aircraft_;

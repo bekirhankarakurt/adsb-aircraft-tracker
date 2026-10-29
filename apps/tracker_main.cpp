@@ -16,7 +16,7 @@
 
 namespace {
 
-enum class Format { Auto, Iq, Hex };
+enum class Format : std::uint8_t { Auto, Iq, Hex };
 
 struct Options {
     std::string input = "-";
@@ -135,7 +135,7 @@ public:
 private:
     using Clock = std::chrono::steady_clock;
 
-    double wallSeconds() const {
+    [[nodiscard]] double wallSeconds() const {
         return std::chrono::duration<double>(Clock::now() - start_).count();
     }
 
@@ -234,7 +234,7 @@ int main(int argc, char** argv) {
         } else if (arg == "--html") {
             options.htmlPath = value();
         } else if (arg == "--ttl") {
-            options.ttl = std::atof(value());
+            options.ttl = std::strtod(value(), nullptr);
             if (options.ttl <= 0.0) {
                 std::fputs("adsb-tracker: --ttl must be positive\n", stderr);
                 return 2;
@@ -247,7 +247,7 @@ int main(int argc, char** argv) {
             options.verbose = true;
         } else if (arg == "-q" || arg == "--quiet") {
             options.quiet = true;
-        } else if (arg == "-" || arg.rfind("-", 0) != 0) {
+        } else if (arg == "-" || arg.rfind('-', 0) != 0) {
             options.input = arg;
         } else {
             std::fprintf(stderr, "adsb-tracker: unknown option '%s'\n%s", arg.c_str(), kUsage);

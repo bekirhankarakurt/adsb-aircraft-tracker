@@ -8,10 +8,10 @@
 namespace adsb {
 namespace {
 
-constexpr std::size_t kChunkBytes = 64 * 1024;
+constexpr std::size_t kChunkBytes = std::size_t{64} * 1024;
 constexpr double kMlatClockHz = 12.0e6;
 constexpr std::size_t kTimestampDigits = 12;
-constexpr std::size_t kFrameDigits = kLongFrameBytes * 2;
+constexpr std::size_t kFrameDigits = kLongFrameBytes * 2u;
 
 int hexValue(char c) {
     if (c >= '0' && c <= '9') {
