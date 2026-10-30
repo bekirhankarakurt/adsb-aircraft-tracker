@@ -1,0 +1,16 @@
+PROJECT_NAME           = "adsb-aircraft-tracker"
+PROJECT_BRIEF          = "ADS-B Mode S decoder and aircraft tracker"
+OUTPUT_DIRECTORY       = build-docs
+INPUT                  = README.md include src
+FILE_PATTERNS          = *.hpp *.cpp *.md
+RECURSIVE              = YES
+USE_MDFILE_AS_MAINPAGE = README.md
+EXTRACT_ALL            = YES
+EXTRACT_STATIC         = YES
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+HAVE_DOT               = YES
+CALL_GRAPH             = NO
+SOURCE_BROWSER         = YES
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = NO
