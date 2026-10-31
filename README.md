@@ -3,9 +3,16 @@
 Decode 1090 MHz ADS-B straight from RTL-SDR IQ samples (or hex frames) into a live aircraft table, JSON and an HTML map - modern C++17, no dependencies.
 
 [![CI](https://github.com/bekirhankarakurt/adsb-aircraft-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/bekirhankarakurt/adsb-aircraft-tracker/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/bekirhankarakurt/adsb-aircraft-tracker/actions/workflows/codeql.yml/badge.svg)](https://github.com/bekirhankarakurt/adsb-aircraft-tracker/actions/workflows/codeql.yml)
+[![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fbekirhankarakurt.github.io%2Fadsb-aircraft-tracker%2Fcoverage.json)](https://bekirhankarakurt.github.io/adsb-aircraft-tracker/coverage/)
+[![Release](https://img.shields.io/github/v/release/bekirhankarakurt/adsb-aircraft-tracker)](https://github.com/bekirhankarakurt/adsb-aircraft-tracker/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C.svg)](https://en.cppreference.com/w/cpp/17)
-[![Platform: Linux](https://img.shields.io/badge/platform-Linux-lightgrey.svg)](#requirements)
+[![Platform: Linux](https://img.shields.io/badge/platform-Linux-lightgrey.svg)](https://github.com/bekirhankarakurt/adsb-aircraft-tracker#requirements)
+
+![Demo: decoding a sample capture](docs/demo.gif)
+
+**Documentation:** [API reference and coverage report](https://bekirhankarakurt.github.io/adsb-aircraft-tracker/) | [Changelog](CHANGELOG.md) | [Contributing](CONTRIBUTING.md)
 
 ## Why / what
 
@@ -198,6 +205,8 @@ ctest --test-dir build --output-on-failure   # 12 tests
 | `samples` | replay of `sample.iq`, `sample.hex`, `reference.hex` |
 | `cli.*` | end-to-end runs of the binary including stdin and bad options |
 
+Static analysis (cppcheck, clang-tidy), coverage and Doxygen run in CI; see [CONTRIBUTING.md](CONTRIBUTING.md) for the local commands.
+
 Sanitizer run: `cmake -S . -B build-san -DADSB_SANITIZE=ON && cmake --build build-san -j && ctest --test-dir build-san`.
 
 ## Troubleshooting / FAQ
@@ -232,7 +241,11 @@ Sanitizer run: `cmake -S . -B build-san -DADSB_SANITIZE=ON && cmake --build buil
 │   └── sim_main.cpp        adsb-sim CLI
 ├── samples/                sample.iq, sample.hex, reference.hex
 ├── tests/                  dependency-free test runner + suites
-└── .github/workflows/      CI: GCC, Clang, ASan/UBSan
+├── docs/                   demo GIF/cast, GitHub Pages landing page
+├── scripts/                coverage badge and demo GIF helpers
+├── Doxyfile                API documentation config
+├── .clang-tidy             static-analysis profile
+└── .github/                workflows (CI, CodeQL, pages, release), templates, dependabot
 ```
 
 ## Roadmap
