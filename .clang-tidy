@@ -22,6 +22,7 @@ Checks: >
   -cert-err33-c,
   -modernize-use-trailing-return-type,
   -readability-magic-numbers,
+  -readability-math-missing-parentheses,
   -readability-identifier-length,
   -readability-function-cognitive-complexity,
   -readability-braces-around-statements,
