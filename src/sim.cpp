@@ -38,7 +38,7 @@ unsigned charIndex(char c) {
 
 class Xorshift {
 public:
-    explicit Xorshift(std::uint64_t seed) { state_ = seed * 0x9E3779B97F4A7C15ull + 1ull; }
+    explicit Xorshift(std::uint64_t seed) : state_(scramble(seed)) {}
     double uniform() {  // [0, 1)
         state_ ^= state_ >> 12;
         state_ ^= state_ << 25;
@@ -47,7 +47,9 @@ public:
     }
 
 private:
-    std::uint64_t state_ = 1;
+    static std::uint64_t scramble(std::uint64_t seed) { return seed * 0x9E3779B97F4A7C15ull + 1ull; }
+
+    std::uint64_t state_;
 };
 
 std::uint8_t toAdc(double v) {
