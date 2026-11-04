@@ -1,0 +1,77 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - target: linux-x86_64
+            compiler: g++
+            packages: ""
+          - target: linux-aarch64
+            compiler: aarch64-linux-gnu-g++
+            packages: g++-aarch64-linux-gnu
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install cross compiler
+        if: matrix.packages != ''
+        run: sudo apt-get update && sudo apt-get install -y ${{ matrix.packages }}
+      - name: Build
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DADSB_BUILD_TESTS=OFF \
+            -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} -DCMAKE_EXE_LINKER_FLAGS=-static
+          cmake --build build -j
+      - name: Test (native only)
+        if: matrix.target == 'linux-x86_64'
+        run: |
+          cmake -S . -B build-test -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-test -j
+          ctest --test-dir build-test --output-on-failure
+      - name: Package
+        run: |
+          name=adsb-aircraft-tracker-${GITHUB_REF_NAME}-${{ matrix.target }}
+          mkdir -p "dist/$name"
+          cp build/adsb-tracker build/adsb-sim README.md LICENSE "dist/$name/"
+          cp -r samples "dist/$name/samples"
+          tar -C dist -czf "$name.tar.gz" "$name"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}
+          path: "*.tar.gz"
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: assets
+          merge-multiple: true
+      - name: Checksums and notes
+        run: |
+          cd assets && sha256sum *.tar.gz > SHA256SUMS && cd ..
+          version=${GITHUB_REF_NAME#v}
+          awk -v v="$version" '
+            $0 ~ "^## \\[" v "\\]" { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          test -s notes.md
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" assets/* \
+            --title "$GITHUB_REF_NAME" --notes-file notes.md --verify-tag
