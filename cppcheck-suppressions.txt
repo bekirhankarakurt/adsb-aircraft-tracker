@@ -1,0 +1,4 @@
+// Raw loops are clearer than std::find_if/accumulate/transform here.
+useStlAlgorithm
+// The counter is mutated by the test case that was just run.
+knownConditionTrueFalse:tests/main.cpp

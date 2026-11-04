@@ -160,7 +160,7 @@ std::string describeMessage(const Message& message) {
 }
 
 std::string toJson(const std::vector<Aircraft>& aircraft, double now) {
-    std::string out = format("{\"now\":%.3f,\"aircraft\":[", now);
+    std::string out = format(R"({"now":%.3f,"aircraft":[)", now);
     bool first = true;
     for (const Aircraft& a : aircraft) {
         out += first ? "\n" : ",\n";
@@ -176,7 +176,7 @@ std::string toJson(const std::vector<Aircraft>& aircraft, double now) {
         out += ",\"lat\":" + jsonOr(lat, "%.5f");
         out += ",\"lon\":" + jsonOr(lon, "%.5f");
         out += ",\"speed_kt\":" + jsonOr(a.speedKt, "%.1f");
-        out += std::string(",\"speed_type\":\"") + speedLabel(a.speedKind) + "\"";
+        out += std::string(R"(,"speed_type":")") + speedLabel(a.speedKind) + "\"";
         out += ",\"heading\":" + jsonOr(a.headingDeg, "%.1f");
         out += ",\"vrate_fpm\":" + jsonOr(a.verticalRateFpm);
         out += format(",\"messages\":%u", static_cast<unsigned>(a.messages));

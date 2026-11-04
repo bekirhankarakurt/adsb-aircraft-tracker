@@ -11,7 +11,7 @@
 namespace adsb {
 
 struct HexLine {
-    FrameBytes bytes;
+    FrameBytes bytes{};
     std::optional<double> timestamp;  // seconds, from an '@' 12 MHz counter prefix
 };
 

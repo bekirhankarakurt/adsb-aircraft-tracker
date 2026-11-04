@@ -23,8 +23,11 @@ std::array<float, 256> makeSquares() {
 const std::array<float, 256> kSquares = makeSquares();
 
 bool hasPreamble(const float* m) {
-    if (!(m[0] > m[1] && m[1] < m[2] && m[2] > m[3] && m[3] < m[0] && m[4] < m[0] &&
-          m[5] < m[0] && m[6] < m[0] && m[7] > m[8] && m[8] < m[9] && m[9] > m[6])) {
+    const bool firstPair = (m[0] > m[1]) && (m[1] < m[2]) && (m[2] > m[3]) && (m[3] < m[0]);
+    const bool quiet = (m[4] < m[0]) && (m[5] < m[0]) && (m[6] < m[0]);
+    const bool secondPair = (m[7] > m[8]) && (m[8] < m[9]) && (m[9] > m[6]);
+    const bool pulses = firstPair && quiet && secondPair;
+    if (!pulses) {
         return false;
     }
     const float high = (m[0] + m[2] + m[7] + m[9]) / 6.0f;

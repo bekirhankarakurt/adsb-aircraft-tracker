@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
         } else if (arg == "--seed") {
             iq.seed = std::strtoull(value(), nullptr, 10);
         } else if (arg == "--noise") {
-            iq.noise = std::atof(value());
+            iq.noise = std::strtod(value(), nullptr);
         } else {
             std::fprintf(stderr, "adsb-sim: unknown option '%s'\n%s", arg.c_str(), kUsage);
             return 2;

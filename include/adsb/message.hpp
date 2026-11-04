@@ -9,7 +9,7 @@
 
 namespace adsb {
 
-enum class SpeedKind { GroundSpeed, IndicatedAirspeed, TrueAirspeed };
+enum class SpeedKind : std::uint8_t { GroundSpeed, IndicatedAirspeed, TrueAirspeed };
 
 struct Identification {
     std::string callsign;
