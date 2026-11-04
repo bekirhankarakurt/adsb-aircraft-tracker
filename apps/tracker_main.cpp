@@ -109,7 +109,7 @@ public:
                 [this](const adsb::RawFrame& f) { onFrame(f); });
             now_ = frameTime_;
             emit(true);
-            std::printf("%llu lines: %llu valid, %llu corrected, %llu rejected\n",
+            std::fprintf(stderr, "%llu lines: %llu valid, %llu corrected, %llu rejected\n",
                         static_cast<unsigned long long>(stats.lines),
                         static_cast<unsigned long long>(stats.valid),
                         static_cast<unsigned long long>(stats.corrected),
@@ -123,7 +123,7 @@ public:
             now_ = frameTime_;
             emit(true);
             const adsb::DemodStats& s = demod.stats();
-            std::printf("%llu samples (%.2f s): %llu valid, %llu corrected, %llu rejected\n",
+            std::fprintf(stderr, "%llu samples (%.2f s): %llu valid, %llu corrected, %llu rejected\n",
                         static_cast<unsigned long long>(s.samples), demod.streamTime(),
                         static_cast<unsigned long long>(s.valid),
                         static_cast<unsigned long long>(s.corrected),
