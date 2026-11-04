@@ -1,0 +1,64 @@
+name: Coverage and docs
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
+          python3 -m pip install gcovr
+      - name: Build with coverage
+        run: |
+          cmake -S . -B build-cov -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage -O0"
+          cmake --build build-cov -j
+      - name: Run tests
+        run: ctest --test-dir build-cov --output-on-failure
+      - name: Coverage report
+        run: |
+          mkdir -p site/coverage
+          gcovr --root . --filter 'src/' --filter 'include/' --exclude-throw-branches \
+            --txt-summary --html-details site/coverage/index.html --json-summary coverage.json build-cov
+          python3 scripts/coverage_badge.py coverage.json > site/coverage.json
+      - name: API documentation
+        run: doxygen Doxyfile
+      - name: Assemble site
+        run: |
+          mv build-docs/html site/api
+          cp docs/site-index.html site/index.html
+      - uses: actions/configure-pages@v5
+        if: github.ref == 'refs/heads/main'
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          path: site
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
