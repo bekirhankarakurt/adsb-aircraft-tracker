@@ -40,7 +40,7 @@ jobs:
         run: |
           mv build-docs/html site/api
           cp docs/site-index.html site/index.html
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
         if: github.ref == 'refs/heads/main'
         with:
           enablement: true
