@@ -43,7 +43,7 @@ jobs:
           cp build/adsb-tracker build/adsb-sim README.md LICENSE "dist/$name/"
           cp -r samples "dist/$name/samples"
           tar -C dist -czf "$name.tar.gz" "$name"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.target }}
           path: "*.tar.gz"
